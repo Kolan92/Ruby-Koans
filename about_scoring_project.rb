@@ -31,10 +31,54 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 
 def score(dice)
   # You need to write this method
-  0
+  raise ArgumentError, "Not an array" unless dice.is_a?(Array)
+
+  hash = dice.group_by do
+    |item| item
+  end
+
+  hash.inject(0) do |sum, group|
+    key = group[0]
+    first, second, third, *rest = group[1]
+
+    if first && second && third
+      if key == 1
+        sum += 1000
+      else
+        sum += 100 * key
+      end
+
+      sum += score_array(rest)
+    else
+      sum += score_array(group[1])
+    end
+
+    sum
+  end
+end
+
+def score_array(array)
+  0 unless array.is_a?(Array)
+
+  array.inject(0) do |sum, item|
+    if item == 5
+      sum + 50
+    elsif item == 1
+      sum + 100
+    else
+      sum
+    end
+  end
 end
 
 class AboutScoringProject < Neo::Koan
+
+  def test_raise_error_given_invalid_argument
+    assert_raise(ArgumentError) do
+      score(1)
+    end
+  end
+
   def test_score_of_an_empty_list_is_zero
     assert_equal 0, score([])
   end
