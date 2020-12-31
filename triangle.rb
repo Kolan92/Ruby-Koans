@@ -15,6 +15,19 @@
 #
 def triangle(a, b, c)
   # WRITE THIS CODE
+  raise TriangleError if a < 1 || b < 1 || c < 1
+
+  max, y, z = [a,b,c].sort_by { |x| x}.reverse
+  raise TriangleError if max >= y + z
+
+  if a == b && b == c
+    return :equilateral
+  elsif a == b || b == c || a == c
+    return :isosceles
+  else
+    return :scalene
+  end
+
 end
 
 # Error class used in part 2.  No need to change this code.
