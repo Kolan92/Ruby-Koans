@@ -42,10 +42,10 @@ def score(dice)
     first, second, third, *rest = group[1]
 
     if first && second && third
-      if key == 1
-        sum += 1000
+      sum += if key == 1
+        1000
       else
-        sum += 100 * key
+        100 * key
       end
 
       sum += score_array(rest)
